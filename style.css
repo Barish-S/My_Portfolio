@@ -321,6 +321,7 @@ section {
 }
 
 .section-container {
+  margin-top: -5%;
   gap: 4rem;
   height: 80%;
 }
