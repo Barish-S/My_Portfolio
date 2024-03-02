@@ -21,7 +21,7 @@
   }
   #experience,
   .experience-details-container {
-    margin-top: 2rem;
+    /* margin-top: 2rem; */
   }
   #profile,
   .section-container {
@@ -47,9 +47,9 @@
     margin-left: 10%;
     
   }
-  .about-containers {
+  /* .about-containers {
     margin-top: 5%;
-  }
+  } */
   .contact-info-upper-container{
     flex-wrap: wrap;
   }
