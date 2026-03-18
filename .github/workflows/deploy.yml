@@ -1,0 +1,32 @@
+name: 🚀 Deploy to EC2
+
+on:
+  push:
+    branches:
+      - master        # Triggers on push to master branch
+
+jobs:
+  deploy:
+    name: Deploy via SSH
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1 - Checkout the code
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2 - Deploy to EC2 via SSH
+      - name: 🔑 Setup SSH & Deploy
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "🔄 Pulling latest code..."
+            cd /var/www/html
+            git fetch origin
+            git reset --hard origin/master
+            echo "🔁 Reloading Nginx..."
+            sudo systemctl reload nginx
+            echo "✅ Deployment successful at $(date)"
