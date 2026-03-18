@@ -3,7 +3,7 @@ name: 🚀 Deploy to EC2
 on:
   push:
     branches:
-      - master        # Triggers on push to master branch
+      - master
 
 jobs:
   deploy:
@@ -11,11 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1 - Checkout the code
       - name: 📥 Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4      # ✅ Updated to v4 (fixes Node.js warning)
 
-      # Step 2 - Deploy to EC2 via SSH
       - name: 🔑 Setup SSH & Deploy
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -23,10 +21,14 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            echo "🔧 Fixing permissions..."
+            sudo chown -R ubuntu:ubuntu /var/www/html
+
             echo "🔄 Pulling latest code..."
             cd /var/www/html
             git fetch origin
             git reset --hard origin/master
+
             echo "🔁 Reloading Nginx..."
             sudo systemctl reload nginx
-            echo "✅ Deployment successful at $(date)"
+            echo "✅ Deployed at $(date)"
